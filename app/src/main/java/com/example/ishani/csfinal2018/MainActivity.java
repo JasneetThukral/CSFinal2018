@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -44,7 +45,7 @@ public final class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         setContentView(R.layout.activity_main);
 
-        tv = (TextView) findViewById(R.id.searchResult);
+        //tv = (TextView) findViewById(R.id.searchResult);
 
 
         final Button searchButton = findViewById(R.id.search);
@@ -52,7 +53,7 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 Log.d(TAG, "Search button clicked");
-                //tv = (TextView) findViewById(R.id.searchResult);
+                tv = (TextView) findViewById(R.id.searchResult);
                 adviceSearch = findViewById(R.id.searchAdvice);
                 String query = adviceSearch.getText().toString();
                 Log.e(TAG, query);
@@ -67,7 +68,7 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 Log.d(TAG, "Start API button clicked");
-                //tv = (TextView) findViewById(R.id.searchResult);
+                tv = (TextView) findViewById(R.id.searchResult);
                 startAPICall(tv);
             }
         });
@@ -124,18 +125,24 @@ public final class MainActivity extends AppCompatActivity {
                         public void onResponse(final JSONObject response) {
                             Log.d(TAG, response.toString());
                             try {
+                                String toSet = "";
                                 int length = ((JSONArray) response.get("slips")).length();
                                 /*if (length > 5) {
-                                    length = 5;
+                                length = 5;
                                 }*/
-                                String toSet = "";
                                 for (int i = 0; i < length; i++) {
                                     String temp = (((JSONArray) response.get("slips")).getJSONObject(i)).get("advice").toString();
                                     toSet = toSet + "\n\n" + temp;
                                 }
                                 v.setText(toSet);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                String toSet = null;
+                                try {
+                                    toSet = ("\n" + ((JSONObject) response.get("message")).get("text").toString());
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                }
+                                v.setText(toSet);
                             }
                         }
                     }, new Response.ErrorListener() {
