@@ -84,15 +84,55 @@ public final class MainActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 Log.d(TAG, "relationship button clicked");
                 tv = (TextView) findViewById(R.id.searchResult);
-                trial = "trial";
-                buttonAdvice("love");
-                Log.d("\nmain, after love", trial);
-                buttonAdvice("married");
-                Log.d("\nmain, after married", trial);
+                /*trial = "trial";
+                helpUsPls("love", "married");
+                Log.d("END", trial);
                 tv.setText(trial);
+                Log.d("VERY END", trial);*/
+                searchButton("love", tv);
 
             }
         });
+
+        final Button happy = findViewById(R.id.happiness);
+        happy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "happiness button clicked");
+                tv = (TextView) findViewById(R.id.searchResult);
+                searchButton("good", tv);
+
+            }
+        });
+
+        final Button health = findViewById(R.id.health);
+        health.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "health button clicked");
+                tv = (TextView) findViewById(R.id.searchResult);
+                searchButton("eat", tv);
+
+            }
+        });
+
+        final Button regrets = findViewById(R.id.noregrets);
+        regrets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "no regrets button clicked");
+                tv = (TextView) findViewById(R.id.searchResult);
+                searchButton("regret", tv);
+
+            }
+        });
+    }
+
+    /*void helper(String one, String two) {
+        buttonAdvice(one);
+        Log.d("\nmain, after one", trial);
+        buttonAdvice(two);
+        Log.d("\nmain, after two", trial);
     }
 
     void buttonAdvice(final String query) {
@@ -110,9 +150,8 @@ public final class MainActivity extends AppCompatActivity {
                                 int length = ((JSONArray) response.get("slips")).length();
                                 for (int i = 0; i < length; i++) {
                                     String temp = (((JSONArray) response.get("slips")).getJSONObject(i)).get("advice").toString();
-                                    Log.d(TAG, "buttonadvice temp: " + temp);
                                     trial += temp;
-                                    Log.d("buttonadvice, after concat", trial);
+                                    Log.d("buttonadviceafterconcat", trial);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -129,7 +168,7 @@ public final class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     /**
