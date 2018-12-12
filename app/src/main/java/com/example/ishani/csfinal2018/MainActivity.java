@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
+
 
 public final class MainActivity extends AppCompatActivity {
     private static final String TAG = "FinalProject:Main";
@@ -37,6 +39,8 @@ public final class MainActivity extends AppCompatActivity {
      */
     private TextView tv;
 
+    static String trial;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public final class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+
                 Log.d(TAG, "Search button clicked");
                 tv = (TextView) findViewById(R.id.searchResult);
                 adviceSearch = findViewById(R.id.searchAdvice);
@@ -63,22 +68,76 @@ public final class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Button startAPICall = findViewById(R.id.startAPICall);
-        startAPICall.setOnClickListener(new View.OnClickListener() {
+        final Button random = findViewById(R.id.startAPICall);
+        random.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Log.d(TAG, "Start API button clicked");
                 tv = (TextView) findViewById(R.id.searchResult);
-                startAPICall(tv);
+                randomAdvice(tv);
+            }
+        });
+
+        final Button relationship = findViewById(R.id.relationships);
+        relationship.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "relationship button clicked");
+                tv = (TextView) findViewById(R.id.searchResult);
+                trial = "trial";
+                buttonAdvice("love");
+                Log.d("\nmain, after love", trial);
+                buttonAdvice("married");
+                Log.d("\nmain, after married", trial);
+                tv.setText(trial);
+
             }
         });
     }
+
+    void buttonAdvice(final String query) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "https://api.adviceslip.com/advice/search/" + query,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(final JSONObject response) {
+                            Log.d(TAG, response.toString());
+                            try {
+                                String toSet = "";
+                                int length = ((JSONArray) response.get("slips")).length();
+                                for (int i = 0; i < length; i++) {
+                                    String temp = (((JSONArray) response.get("slips")).getJSONObject(i)).get("advice").toString();
+                                    Log.d(TAG, "buttonadvice temp: " + temp);
+                                    trial += temp;
+                                    Log.d("buttonadvice, after concat", trial);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(final VolleyError error) {
+                    Log.w(TAG, error.toString());
+                }
+
+            });
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Make an API call.
      * @param t view to change
      */
-    void startAPICall(final TextView t) {
+
+    void randomAdvice(final TextView t) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,

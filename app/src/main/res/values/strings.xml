@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CSFinal2018</string>
+    <string name="Search">SEARCH</string>
+    <string name="Relationships">RELATIONSHIPS</string>
+    <string name="Happiness">HAPPINESS</string>
+    <string name="Health">HEALTH</string>
+    <string name="Noregrets">NO REGRETS</string>
+    <string name="randomgenerator">RANDOM ADVICE GENERATOR</string>
 </resources>
